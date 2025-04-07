@@ -18,6 +18,14 @@ except ImportError:
 DEFAULT_PORT = 9877
 HOST = "localhost"
 
+STATE_MODIFYING_COMMANDS = [
+    "add_notes_to_clip", "create_audio_track", "create_clip", "create_midi_track",
+    "fire_clip", "load_browser_item", "load_instrument_or_effect",
+    "search_browser_items", "set_clip_name", "set_clip_properties",
+    "set_device_parameters", "set_tempo", "set_track_name", "start_playback",
+    "stop_clip", "stop_playback"
+]
+
 
 def create_instance(c_instance):
     """Create and return the AbletonMCP script instance"""
@@ -231,13 +239,7 @@ class AbletonMCP(ControlSurface):
                 response["result"] = self._get_master_track_info()
 
             # Commands that modify Live's state should be scheduled on the main thread
-            elif command_type in [
-                "add_notes_to_clip", "create_audio_track", "create_clip", "create_midi_track",
-                "fire_clip", "load_browser_item", "load_instrument_or_effect",
-                "search_browser_items", "set_clip_name", "set_clip_properties",
-                "set_device_parameters", "set_tempo", "set_track_name", "start_playback",
-                "stop_clip", "stop_playback"
-            ]:
+            elif command_type in STATE_MODIFYING_COMMANDS:
                 # Use a thread-safe approach with a response queue
                 response_queue = queue.Queue()
 

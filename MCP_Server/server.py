@@ -7,6 +7,8 @@ from dataclasses import dataclass
 from contextlib import asynccontextmanager
 from typing import AsyncIterator, Dict, Any, List, Union
 
+from AbletonMCP_Remote_Script import STATE_MODIFYING_COMMANDS
+
 # Configure logging
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -102,13 +104,7 @@ class AbletonConnection:
         }
 
         # Check if this is a state-modifying command
-        is_modifying_command = command_type in [
-            "add_notes_to_clip", "create_audio_track", "create_clip", "create_midi_track",
-            "fire_clip", "load_browser_item", "load_instrument_or_effect",
-            "search_browser_items", "set_clip_name", "set_clip_properties",
-            "set_device_parameters", "set_tempo", "set_track_name", "start_playback",
-            "stop_clip", "stop_playback"
-        ]
+        is_modifying_command = command_type in STATE_MODIFYING_COMMANDS
 
         try:
             logger.info(f"Sending command: {command_type} with params: {params}")
