@@ -796,7 +796,7 @@ def search_browser_items(ctx: Context, query: str, category_type: str = "all", m
             "category_type": category_type,
             "max_results": max_results
         })
-        print(result)
+        logger.info('server.py - got result {0}'.format(result))
 
         # Format the results nicely
         total_results = result.get("total_results", 0)
