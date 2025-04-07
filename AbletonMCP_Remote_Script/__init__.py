@@ -21,7 +21,7 @@ HOST = "localhost"
 STATE_MODIFYING_COMMANDS = [
     "add_notes_to_clip", "create_audio_track", "create_clip", "create_midi_track",
     "fire_clip", "load_browser_item", "load_instrument_or_effect",
-    "search_browser_items", "set_clip_name", "set_clip_properties",
+    "search_browser_items", "set_clip_properties",
     "set_device_parameters", "set_tempo", "set_track_name", "start_playback",
     "stop_clip", "stop_playback"
 ]
@@ -264,11 +264,6 @@ class AbletonMCP(ControlSurface):
                             clip_index = params.get("clip_index", 0)
                             notes = params.get("notes", [])
                             result = self._add_notes_to_clip(track_index, clip_index, notes)
-                        elif command_type == "set_clip_name":
-                            track_index = params.get("track_index", 0)
-                            clip_index = params.get("clip_index", 0)
-                            name = params.get("name", "")
-                            result = self._set_clip_name(track_index, clip_index, name)
                         elif command_type == "set_tempo":
                             tempo = params.get("tempo", 120.0)
                             result = self._set_tempo(tempo)
@@ -612,33 +607,6 @@ class AbletonMCP(ControlSurface):
             return result
         except Exception as e:
             self.log_message("Error adding notes to clip: " + str(e))
-            raise
-
-    def _set_clip_name(self, track_index, clip_index, name):
-        """Set the name of a clip"""
-        try:
-            if track_index < 0 or track_index >= len(self._song.tracks):
-                raise IndexError("Track index out of range")
-
-            track = self._song.tracks[track_index]
-
-            if clip_index < 0 or clip_index >= len(track.clip_slots):
-                raise IndexError("Clip index out of range")
-
-            clip_slot = track.clip_slots[clip_index]
-
-            if not clip_slot.has_clip:
-                raise Exception("No clip in slot")
-
-            clip = clip_slot.clip
-            clip.name = name
-
-            result = {
-                "name": clip.name
-            }
-            return result
-        except Exception as e:
-            self.log_message("Error setting clip name: " + str(e))
             raise
 
     def _set_tempo(self, tempo):

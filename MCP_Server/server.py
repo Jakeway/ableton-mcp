@@ -10,7 +10,7 @@ from typing import AsyncIterator, Dict, Any, List, Union
 STATE_MODIFYING_COMMANDS = [
     "add_notes_to_clip", "create_audio_track", "create_clip", "create_midi_track",
     "fire_clip", "load_browser_item", "load_instrument_or_effect",
-    "search_browser_items", "set_clip_name", "set_clip_properties",
+    "search_browser_items", "set_clip_properties",
     "set_device_parameters", "set_tempo", "set_track_name", "start_playback",
     "stop_clip", "stop_playback"
 ]
@@ -380,29 +380,6 @@ def add_notes_to_clip(
     except Exception as e:
         logger.error(f"Error adding notes to clip: {str(e)}")
         return f"Error adding notes to clip: {str(e)}"
-
-
-@mcp.tool()
-def set_clip_name(ctx: Context, track_index: int, clip_index: int, name: str) -> str:
-    """
-    Set the name of a clip.
-
-    Parameters:
-    - track_index: The index of the track containing the clip
-    - clip_index: The index of the clip slot containing the clip
-    - name: The new name for the clip
-    """
-    try:
-        ableton = get_ableton_connection()
-        result = ableton.send_command("set_clip_name", {
-            "track_index": track_index,
-            "clip_index": clip_index,
-            "name": name
-        })
-        return f"Renamed clip at track {track_index}, slot {clip_index} to '{name}'"
-    except Exception as e:
-        logger.error(f"Error setting clip name: {str(e)}")
-        return f"Error setting clip name: {str(e)}"
 
 
 @mcp.tool()
@@ -856,7 +833,7 @@ def set_clip_properties(ctx: Context, track_index: int, clip_index: int, propert
             "clip_index": clip_index,
             "properties": properties
         })
-        
+
         if len(result) > 0:
             output = [f"Updated clip properties:"]
 
