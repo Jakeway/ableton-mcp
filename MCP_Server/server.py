@@ -7,7 +7,14 @@ from dataclasses import dataclass
 from contextlib import asynccontextmanager
 from typing import AsyncIterator, Dict, Any, List, Union
 
-from AbletonMCP_Remote_Script import STATE_MODIFYING_COMMANDS
+STATE_MODIFYING_COMMANDS = [
+    "add_notes_to_clip", "create_audio_track", "create_clip", "create_midi_track",
+    "fire_clip", "load_browser_item", "load_instrument_or_effect",
+    "search_browser_items", "set_clip_name", "set_clip_properties",
+    "set_device_parameters", "set_tempo", "set_track_name", "start_playback",
+    "stop_clip", "stop_playback"
+]
+
 
 # Configure logging
 logging.basicConfig(level=logging.INFO,
