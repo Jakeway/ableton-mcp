@@ -798,33 +798,28 @@ def search_browser_items(ctx: Context, query: str, category_type: str = "all", m
         })
 
         # Format the results nicely
-        if result.get("status") == "success":
-            search_results = result.get("result", {})
-            total_results = search_results.get("total_results", 0)
-            results = search_results.get("results", [])
+        total_results = result.get("total_results", 0)
+        results = result.get("results", [])
 
-            if not results:
-                return f"No items found matching '{query}'"
+        if total_results == 0:
+            return f"No items found matching '{query}'"
 
-            output = [f"Found {total_results} items matching '{query}' (showing {len(results)}):\n"]
+        output = [f"Found {total_results} items matching '{query}' (showing {len(results)}):\n"]
 
-            for item in results:
-                name = item.get("name", "Unknown")
-                path = item.get("path", "")
-                is_loadable = item.get("is_loadable", False)
-                is_device = item.get("is_device", False)
+        for item in results:
+            name = item.get("name", "Unknown")
+            path = item.get("path", "")
+            is_loadable = item.get("is_loadable", False)
+            is_device = item.get("is_device", False)
 
-                item_type = "Device" if is_device else "Folder" if not is_loadable else "Item"
-                output.append(f"• {name} ({item_type})")
-                output.append(f"  Path: {path}")
-                if item.get("uri"):
-                    output.append(f"  URI: {item.get('uri')}")
-                output.append("")
+            item_type = "Device" if is_device else "Folder" if not is_loadable else "Item"
+            output.append(f"• {name} ({item_type})")
+            output.append(f"  Path: {path}")
+            if item.get("uri"):
+                output.append(f"  URI: {item.get('uri')}")
+            output.append("")
 
-            return "\n".join(output)
-        else:
-            error_msg = result.get("message", "Unknown error")
-            return f"Error searching browser items: {error_msg}"
+        return "\n".join(output)
 
     except Exception as e:
         logger.error(f"Error searching browser items: {str(e)}")
