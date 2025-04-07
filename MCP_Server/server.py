@@ -796,7 +796,6 @@ def search_browser_items(ctx: Context, query: str, category_type: str = "all", m
             "category_type": category_type,
             "max_results": max_results
         })
-        logger.info('server.py - got result {0}'.format(result))
 
         # Format the results nicely
         total_results = result.get("total_results", 0)
@@ -857,18 +856,15 @@ def set_clip_properties(ctx: Context, track_index: int, clip_index: int, propert
             "clip_index": clip_index,
             "properties": properties
         })
-
-        if result.get("status") == "success":
-            clip_props = result.get("result", {})
+        
+        if len(result) > 0:
             output = [f"Updated clip properties:"]
 
-            for prop, value in clip_props.items():
+            for prop, value in result.items():
                 output.append(f"• {prop}: {value}")
-
             return "\n".join(output)
         else:
-            error_msg = result.get("message", "Unknown error")
-            return f"Error setting clip properties: {error_msg}"
+            return "Error setting clip properties"
 
     except Exception as e:
         logger.error(f"Error setting clip properties: {str(e)}")

@@ -1167,7 +1167,6 @@ class AbletonMCP(ControlSurface):
                 "total_results": len(matching_items),
                 "results": matching_items[:max_results]
             }
-            self.log_message("init py - result {0}".format(result))
 
             self.log_message("Found {0} matches for '{1}'".format(len(matching_items), query))
             return result
